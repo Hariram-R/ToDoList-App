@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">To Do List</string>
+    <string name="prompt">Enter task here</string>
+    <string name="prompt2">Enter Course Name here</string>
+    <string name="instruction">Press and hold to edit a Course</string>
+</resources>
