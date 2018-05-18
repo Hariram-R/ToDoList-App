@@ -29,4 +29,15 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/AddCourseButton"
+        android:background="@drawable/course_button"
+        android:text="+ ADD NEW COURSE"
+        android:layout_marginTop="5dp"
+        android:textAllCaps="true"
+        android:textSize="18dp"
+        android:textColor="#FFFFFF"/>
+
 </LinearLayout>

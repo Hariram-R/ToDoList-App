@@ -9,6 +9,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class CourseModel extends RealmObject {
 
+    @PrimaryKey
     String courseName;
 
     public CourseModel() {
@@ -27,4 +28,5 @@ public class CourseModel extends RealmObject {
     public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
+
 }
