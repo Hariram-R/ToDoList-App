@@ -20,6 +20,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         this.button=itemView.findViewById(R.id.course1);
 
         button.setOnClickListener(this);
+        button.setOnLongClickListener(this);
     }
 
     void populateCourseButton(CourseModel Cm1)
