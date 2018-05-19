@@ -16,10 +16,6 @@ public class CourseModel extends RealmObject {
         courseName="";
     }
 
-    public CourseModel(String courseName) {
-        this.courseName = courseName;
-    }
-
     public String getCourseName() {
 
         return courseName;
