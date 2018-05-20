@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -24,6 +25,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> implem
 
     ArrayList<CourseModel> Cl;
 
+    RealmConfiguration defaultConfig = new RealmConfiguration.Builder().build();
     private final Realm realm;
 
 
@@ -53,7 +55,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> implem
     @Override
     public CourseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view= layoutInflater.inflate(R.layout.item_course,null);
+        View view= layoutInflater.inflate(R.layout.item_course,parent,false);
         CourseViewHolder C = new CourseViewHolder(view);
         return C;
     }

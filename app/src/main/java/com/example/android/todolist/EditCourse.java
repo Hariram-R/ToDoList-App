@@ -69,17 +69,40 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
 
         if(view.getId()==R.id.Tick_Button)
         {
-            String newCourseName = Et.getText().toString();
+            final String newCourseName = Et.getText().toString();
             newCourse.setCourseName(newCourseName);
 
-            realm.beginTransaction();
-            realm.insertOrUpdate(newCourse);
-            realm.commitTransaction();
+            if(getIntent().getAction().equals("EditCourse"))
+            {
+                RealmQuery<CourseModel> query = realm.where(CourseModel.class);
+                final CourseModel  result = query.equalTo("courseName",transName).findFirst();
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        result.deleteFromRealm();
+                        realm.insertOrUpdate(newCourse);
+                        /* TODO Copy all course data  into new course!*/
+
+                    }
+                });
+            }
+
+
+            else
+            {
+                realm.beginTransaction();
+                realm.insertOrUpdate(newCourse);
+                realm.commitTransaction();
+
+            }
+
             realm.close();
+
         }
         else if (view.getId()==R.id.DeleteButton)
         {
-            // TODO Delete course and all its data
+            // TODO Delete all its data
 
             RealmQuery<CourseModel> query = realm.where(CourseModel.class);
             final RealmResults<CourseModel> results = query.equalTo("courseName",transName).findAll();

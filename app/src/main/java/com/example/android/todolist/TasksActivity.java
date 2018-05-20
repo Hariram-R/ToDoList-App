@@ -9,10 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class TasksActivity extends AppCompatActivity {
+import io.realm.Realm;
+
+public class TasksActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView courseTitle;
     RecyclerView TaskList;
@@ -20,64 +23,72 @@ public class TasksActivity extends AppCompatActivity {
     Button addButton;
     String transName; //Transferred Course name from MainActivity
     TaskAdapter TA;
+    TaskAdapter TA2;
     RecyclerView.Adapter adapter2;
 
-    ArrayList<TaskModel> Tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
 
-        Tasks = new ArrayList<>(0);
-
-        /*for(int i = 1;i<=5;i++) {
-            TaskModel t1 = new TaskModel();
-            t1.setTask("Study Chapter " + i);
-            t1.setDone(false);
-            Tasks.add(t1);
-            //Log.e("hi",Tasks.get(i-1).getTask());
-        }*/
-
         courseTitle = findViewById(R.id.CourseName);
         TaskList = findViewById(R.id.TaskListRV);
         TaskList.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        TaskList.setHasFixedSize(true);
+        TaskList.setHasFixedSize(false);
+
+
+        addTask = findViewById(R.id.InputTask);
+        addButton = findViewById(R.id.AddTaskButton);
+        addButton.setOnClickListener(this);
+
 
         transName =getIntent().getExtras().getString("CourseName");
         courseTitle.setText(transName);
 
 
-        TA = new TaskAdapter(Tasks,this);
+        TA = new TaskAdapter(transName);
         TaskList.setAdapter(TA);
 
        //Tasks = (ArrayList<TaskModel>) getIntent().getSerializableExtra("TaskListArrayList");
 
 
-        addTask = findViewById(R.id.InputTask);
-        addButton = findViewById(R.id.AddTaskButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String task = addTask.getText().toString();
-                if(task.equals(""))
-                    ;
-                else{
-                    TaskModel newTaskObj = new TaskModel();
-                    newTaskObj.setTask(task);
-                    newTaskObj.setDone(false);
-                    Tasks.add(newTaskObj);
-                    addTask.setText("");
 
-                    adapter2 =  new TaskAdapter(Tasks,TasksActivity.this);
-                    TaskList.setAdapter(adapter2);
-                }
+    }
 
+    @Override
+    public void onClick(View view) {
+        String task = addTask.getText().toString();
 
-            }
-        });
+        boolean flag = false;
+        for(int i = 0;i<task.length();i++)
+        {
+            if(task.charAt(i)!=' ')
+                flag = true;
+        }
 
+        if(!flag || task.equals(""))
+        {
+            Toast emptyWarning = Toast.makeText(getApplicationContext(),"Task cannot be Empty!",Toast.LENGTH_SHORT);
+            emptyWarning.show();
+        }
+        else
+        {
+            TaskModel newTaskObj = new TaskModel();
+            newTaskObj.setTask(task);
+            newTaskObj.setDone(false);
+            newTaskObj.setCourseName(transName);
 
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.insertOrUpdate(newTaskObj);
+            realm.commitTransaction();
 
+            addTask.setText("");
+
+            TA2 = new TaskAdapter(transName);
+            TaskList.setAdapter(TA2);
+
+        }
     }
 }
