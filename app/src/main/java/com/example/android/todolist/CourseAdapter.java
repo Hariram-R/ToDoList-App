@@ -69,7 +69,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> implem
     public void onChange(@NonNull RealmResults<CourseModel> courseModels) {
         Realm realm = Realm.getDefaultInstance();
         this.Cl = new ArrayList<>();
-        for(CourseModel iCM : Cl)
+        for(CourseModel iCM : courseModels)
         {
             Cl.add(realm.copyFromRealm(iCM));
         }

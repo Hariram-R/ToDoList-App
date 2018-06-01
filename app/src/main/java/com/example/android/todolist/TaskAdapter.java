@@ -18,22 +18,22 @@ import io.realm.RealmResults;
  * Created by Hp on 4/10/2018.
  */
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements RealmChangeListener<RealmResults<TaskModel>>{
+public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements RealmChangeListener<RealmResults<TaskModel>>
+{
 
     ArrayList<TaskModel> TaskList;
-    Context context;
-    private final Realm realm;
-
     String course;
+    private Realm realm;
+    int currentPos;
+
 
     public TaskAdapter(String course)
     {
-        realm = Realm.getDefaultInstance();
         this.course = course;
 
-        TaskList = new ArrayList<>();
+        realm = Realm.getDefaultInstance();
+        this.TaskList = new ArrayList<>();
         loadTaskData();
-
     }
 
     void loadTaskData()
@@ -43,16 +43,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
 
         taskModelRealmResults.addChangeListener(this);
 
-
         for(TaskModel iTM : taskModelRealmResults)
         {
             TaskList.add(realm.copyFromRealm(iTM));
         }
-
         notifyDataSetChanged();
 
     }
-
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -66,11 +63,28 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         holder.populateTask(TaskList.get(position));
+        currentPos = position;
     }
 
     @Override
     public int getItemCount() {
         return TaskList.size();
+    }
+
+    public void addNewTask(String task)
+    {
+        TaskModel newTaskObj = new TaskModel();
+        newTaskObj.setTask(task);
+        newTaskObj.setDone(false);
+        newTaskObj.setCourseName(course);
+
+        TaskList.add(currentPos,newTaskObj);
+        notifyItemInserted(currentPos);
+
+        realm.beginTransaction();
+        realm.insertOrUpdate(newTaskObj);
+        realm.commitTransaction();
+
     }
 
     @Override
@@ -81,6 +95,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
 
     @Override
     public void onChange(RealmResults<TaskModel> taskModels) {
+
+        taskModels = realm.where(TaskModel.class).equalTo("courseName",course).findAll();
+        this.TaskList = new ArrayList<>();
+
+        for(TaskModel iTM : taskModels)
+        {
+            this.TaskList.add(realm.copyFromRealm(iTM));
+        }
+        notifyDataSetChanged();
+    }
+
+    //@Override
+    /*public void onChange(RealmResults<TaskModel> taskModels) {
         Realm realm = Realm.getDefaultInstance();
         this.TaskList = new ArrayList<>();
         for(TaskModel iTM : taskModels)
@@ -90,5 +117,5 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
         realm.close();
         notifyDataSetChanged();
 
-    }
+    }*/
 }

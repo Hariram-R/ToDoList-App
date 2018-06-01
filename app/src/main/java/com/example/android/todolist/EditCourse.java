@@ -72,6 +72,8 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
             final String newCourseName = Et.getText().toString();
             newCourse.setCourseName(newCourseName);
 
+            //TODO Give empty course name warning
+
             if(getIntent().getAction().equals("EditCourse"))
             {
                 RealmQuery<CourseModel> query = realm.where(CourseModel.class);

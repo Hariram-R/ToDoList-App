@@ -14,6 +14,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class TasksActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -21,10 +24,13 @@ public class TasksActivity extends AppCompatActivity implements View.OnClickList
     RecyclerView TaskList;
     EditText addTask;
     Button addButton;
+
     String transName; //Transferred Course name from MainActivity
+
+
     TaskAdapter TA;
-    TaskAdapter TA2;
-    RecyclerView.Adapter adapter2;
+
+    private Realm realm;
 
 
     @Override
@@ -35,29 +41,25 @@ public class TasksActivity extends AppCompatActivity implements View.OnClickList
         courseTitle = findViewById(R.id.CourseName);
         TaskList = findViewById(R.id.TaskListRV);
         TaskList.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        TaskList.setHasFixedSize(false);
 
 
         addTask = findViewById(R.id.InputTask);
         addButton = findViewById(R.id.AddTaskButton);
-        addButton.setOnClickListener(this);
 
 
         transName =getIntent().getExtras().getString("CourseName");
         courseTitle.setText(transName);
 
+        addButton.setOnClickListener(this);
 
         TA = new TaskAdapter(transName);
         TaskList.setAdapter(TA);
-
-       //Tasks = (ArrayList<TaskModel>) getIntent().getSerializableExtra("TaskListArrayList");
-
-
 
     }
 
     @Override
     public void onClick(View view) {
+
         String task = addTask.getText().toString();
 
         boolean flag = false;
@@ -74,21 +76,38 @@ public class TasksActivity extends AppCompatActivity implements View.OnClickList
         }
         else
         {
-            TaskModel newTaskObj = new TaskModel();
-            newTaskObj.setTask(task);
-            newTaskObj.setDone(false);
-            newTaskObj.setCourseName(transName);
-
-            Realm realm = Realm.getDefaultInstance();
-            realm.beginTransaction();
-            realm.insertOrUpdate(newTaskObj);
-            realm.commitTransaction();
-
+            TA.addNewTask(task);
             addTask.setText("");
-
-            TA2 = new TaskAdapter(transName);
-            TaskList.setAdapter(TA2);
-
         }
     }
+
+    /*void loadTaskData()
+    {
+        realm = Realm.getDefaultInstance();
+
+        RealmQuery<TaskModel> taskModelRealmQuery = realm.where(TaskModel.class);
+        RealmResults<TaskModel> taskModelRealmResults = taskModelRealmQuery.equalTo("courseName",transName).findAll();
+
+        for(TaskModel iTM : taskModelRealmResults)
+        {
+            Tl.add(realm.copyFromRealm(iTM));
+        }
+
+        taskModelRealmResults.addChangeListener(new RealmChangeListener<RealmResults<TaskModel>>() {
+            @Override
+            public void onChange(RealmResults<TaskModel> taskModels) {
+
+                Tl = new ArrayList<>();
+                for(TaskModel iTM : taskModels)
+                {
+                    Tl.add(realm.copyFromRealm(iTM));
+                }
+
+                TA.notifyDataSetChanged();
+            }
+        });
+//        TA.notifyDataSetChanged();
+        realm.close();
+    }*/
+
 }
