@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -44,35 +45,35 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
         else
             transName = "";
 
-        /*tickButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                realm.insertOrUpdate(newCourse);
-                realm.commitTransaction();
-                realm.close();
-
-
-                Intent backIntent = new Intent(view.getContext(),MainActivity.class);
-                startActivity(backIntent);
-
-            }
-        });*/
     }
 
     @Override
     public void onClick(View view) {
         Realm realm = Realm.getDefaultInstance();
+        boolean exflag = false; // For empty course logic
 
         if(view.getId()==R.id.Tick_Button)
         {
             final String newCourseName = Et.getText().toString();
-            newCourse.setCourseName(newCourseName);
 
-            //TODO Give empty course name warning
+            boolean flag = false;
+            for(int i = 0;i<newCourseName.length();i++)
+            {
+                if(newCourseName.charAt(i)!=' ')
+                    flag = true;
+            }
+
+            if(!flag || newCourseName.equals(""))
+            {
+                Toast emptyWarning = Toast.makeText(getApplicationContext(),"Course name cannot be Empty!",Toast.LENGTH_SHORT);
+                emptyWarning.show();
+            }
+            else
+            {
+                newCourse.setCourseName(newCourseName);
+                exflag = true;
+            }
+
 
             if(getIntent().getAction().equals("EditCourse"))
             {
@@ -90,8 +91,7 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
                 });
             }
 
-
-            else
+            if(exflag)
             {
                 realm.beginTransaction();
                 realm.insertOrUpdate(newCourse);
@@ -104,15 +104,17 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
         }
         else if (view.getId()==R.id.DeleteButton)
         {
-            // TODO Delete all its data
-
             RealmQuery<CourseModel> query = realm.where(CourseModel.class);
             final RealmResults<CourseModel> results = query.equalTo("courseName",transName).findAll();
+
+            RealmQuery<TaskModel> taskQuery = realm.where(TaskModel.class);
+            final RealmResults<TaskModel> taskResults = taskQuery.equalTo("courseName",transName).findAll();
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     results.deleteAllFromRealm();
+                    taskResults.deleteAllFromRealm();
 
                 }
             });
@@ -120,7 +122,6 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
             realm.close();
         }
 
-        //finish();
         Intent intenttoMainActivity = new Intent(view.getContext(),MainActivity.class);
         startActivity(intenttoMainActivity);
     }

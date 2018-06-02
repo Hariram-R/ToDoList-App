@@ -89,28 +89,3 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> implem
         return Cl.size();
     }
 }
-
-
- /*holder.button.setText(Cl.get(position).getCourseName());
-        holder.button.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(),TasksActivity.class);
-                intent.putExtra("CourseName",Cl.get(position).getCourseName());
-                intent.setAction("ViewTasks");
-                view.getContext().startActivity(intent);
-            }
-
-
-        });
-
-        holder.button.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Intent intent = new Intent(view.getContext(),EditCourse.class);
-                intent.putExtra("CourseName",Cl.get(position).getCourseName());
-                intent.setAction("EditCourse");
-                view.getContext().startActivity(intent);
-                return true;
-            }
-        });*/

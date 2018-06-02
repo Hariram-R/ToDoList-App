@@ -30,9 +30,6 @@ public class TasksActivity extends AppCompatActivity implements View.OnClickList
 
     TaskAdapter TA;
 
-    private Realm realm;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,33 +78,10 @@ public class TasksActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    /*void loadTaskData()
-    {
-        realm = Realm.getDefaultInstance();
-
-        RealmQuery<TaskModel> taskModelRealmQuery = realm.where(TaskModel.class);
-        RealmResults<TaskModel> taskModelRealmResults = taskModelRealmQuery.equalTo("courseName",transName).findAll();
-
-        for(TaskModel iTM : taskModelRealmResults)
-        {
-            Tl.add(realm.copyFromRealm(iTM));
-        }
-
-        taskModelRealmResults.addChangeListener(new RealmChangeListener<RealmResults<TaskModel>>() {
-            @Override
-            public void onChange(RealmResults<TaskModel> taskModels) {
-
-                Tl = new ArrayList<>();
-                for(TaskModel iTM : taskModels)
-                {
-                    Tl.add(realm.copyFromRealm(iTM));
-                }
-
-                TA.notifyDataSetChanged();
-            }
-        });
-//        TA.notifyDataSetChanged();
-        realm.close();
-    }*/
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TA.realm.close();
+    }
 
 }

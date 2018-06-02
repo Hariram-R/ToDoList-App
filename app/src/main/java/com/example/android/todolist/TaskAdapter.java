@@ -23,7 +23,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
 
     ArrayList<TaskModel> TaskList;
     String course;
-    private Realm realm;
+    Realm realm;
     int currentPos;
 
 
@@ -31,8 +31,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
     {
         this.course = course;
 
-        realm = Realm.getDefaultInstance();
         this.TaskList = new ArrayList<>();
+        realm = Realm.getDefaultInstance();
         loadTaskData();
     }
 
@@ -53,6 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        realm = Realm.getDefaultInstance();
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view= layoutInflater.inflate(R.layout.item_task,parent,false);
 
@@ -87,11 +88,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
 
     }
 
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        realm.close();
-    }
 
     @Override
     public void onChange(RealmResults<TaskModel> taskModels) {
@@ -106,16 +102,4 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
         notifyDataSetChanged();
     }
 
-    //@Override
-    /*public void onChange(RealmResults<TaskModel> taskModels) {
-        Realm realm = Realm.getDefaultInstance();
-        this.TaskList = new ArrayList<>();
-        for(TaskModel iTM : taskModels)
-        {
-            TaskList.add(realm.copyFromRealm(iTM));
-        }
-        realm.close();
-        notifyDataSetChanged();
-
-    }*/
 }
