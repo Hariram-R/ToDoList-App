@@ -18,7 +18,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 /**
- * Created by Hp on 4/9/2018.
+ * Created by Hari on 4/9/2018.
  */
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> implements RealmChangeListener<RealmResults<CourseModel>> {

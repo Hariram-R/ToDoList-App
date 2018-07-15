@@ -43,7 +43,10 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
             Et.setText(transName);
         }
         else
+        {
             transName = "";
+            deleteButton.setText("Cancel");
+        }
 
     }
 
@@ -70,29 +73,38 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
             }
             else
             {
-                newCourse.setCourseName(newCourseName);
                 exflag = true;
             }
 
 
             if(getIntent().getAction().equals("EditCourse"))
             {
-                RealmQuery<CourseModel> query = realm.where(CourseModel.class);
-                final CourseModel  result = query.equalTo("courseName",transName).findFirst();
+                if(!newCourseName.equalsIgnoreCase(transName))
+                {
+                    CourseModel  result = realm.where(CourseModel.class).equalTo("courseName",transName).findFirst();
+                    RealmResults<TaskModel> tasks = realm.where(TaskModel.class).equalTo("courseName",transName).findAll();
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        result.deleteFromRealm();
-                        realm.insertOrUpdate(newCourse);
-                        /* TODO Copy all course data  into new course!*/
+                    realm.beginTransaction();
+                    CourseModel updatedCourse = realm.copyFromRealm(result);
+                    updatedCourse.setCourseName(newCourseName);
+                    realm.copyToRealmOrUpdate(updatedCourse);
+                    result.deleteFromRealm();
 
+                    int i = 0;
+                    while(i<tasks.size())
+                    {
+                        tasks.get(i).setCourseName(newCourseName);
                     }
-                });
+                    realm.commitTransaction();
+                }
+
             }
 
-            if(exflag)
+            else if(getIntent().getAction().equals("CreateCourse") && exflag)
             {
+                newCourse = new CourseModel();
+                newCourse.setCourseName(newCourseName);
+
                 realm.beginTransaction();
                 realm.insertOrUpdate(newCourse);
                 realm.commitTransaction();

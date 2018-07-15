@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import io.realm.Realm;
 
 
-// TODO Proper back nav!
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerView crv;

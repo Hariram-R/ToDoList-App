@@ -9,7 +9,7 @@ import android.widget.TextView;
 import io.realm.Realm;
 
 /**
- * Created by Hp on 4/10/2018.
+ * Created by Hari on 4/10/2018.
  */
 
 public class TaskViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener {

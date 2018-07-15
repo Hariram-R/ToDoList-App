@@ -1,5 +1,6 @@
 package com.example.android.todolist;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -7,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * Created by Hp on 4/9/2018.
+ * Created by Hari on 4/9/2018.
  */
 
 public class CourseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -35,7 +36,6 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
             intent.putExtra("CourseName",Cm.getCourseName());
             intent.setAction("ViewTasks");
             view.getContext().startActivity(intent);
-
     }
 
 
@@ -45,6 +45,7 @@ public class CourseViewHolder extends RecyclerView.ViewHolder implements View.On
         intent.putExtra("CourseName",Cm.getCourseName());
         intent.setAction("EditCourse");
         view.getContext().startActivity(intent);
+        ((Activity)view.getContext()).finish();
         return true;
     }
 }

@@ -16,7 +16,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 /**
- * Created by Hp on 4/10/2018.
+ * Created by Hari on 4/10/2018.
  */
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>
@@ -40,18 +40,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>
 
     void loadTaskData()
     {
-        //TODO : Delete task if completed
-
         RealmResults<TaskModel> taskModelRealmResults = realm.where(TaskModel.class).equalTo("courseName",course).findAll();
 
         int i = 0;
-        while (i<taskModelRealmResults.size())
+        while(i<taskModelRealmResults.size())
         {
-            TaskList.add(taskModelRealmResults.get(i));
+            if(!taskModelRealmResults.get(i).isDone())
+            {
+                TaskList.add(taskModelRealmResults.get(i));
+            }
             i++;
         }
-        notifyDataSetChanged();
 
+        notifyDataSetChanged();
     }
 
     @Override
