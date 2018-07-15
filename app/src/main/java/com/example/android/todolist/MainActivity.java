@@ -14,10 +14,7 @@ import java.util.ArrayList;
 import io.realm.Realm;
 
 
-/**
- * TODO: Task Disappears on clicking checkbox
- * TODO: Start Realm by using course names first.
- * */
+// TODO Proper back nav!
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerView crv;
@@ -45,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Intent intent = new Intent(this,EditCourse.class);
         intent.setAction("CreateCourse");
-        //intent.putExtra("CourseName","");
-        //intent.putExtra("CourseObject",Cl.get(position));
         startActivity(intent);
+        finish();
     }
 }

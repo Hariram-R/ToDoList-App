@@ -44,12 +44,12 @@ public class TasksActivity extends AppCompatActivity implements View.OnClickList
         addButton = findViewById(R.id.AddTaskButton);
 
 
-        transName =getIntent().getExtras().getString("CourseName");
+        transName = getIntent().getExtras().getString("CourseName");
         courseTitle.setText(transName);
 
         addButton.setOnClickListener(this);
 
-        TA = new TaskAdapter(transName);
+        TA = new TaskAdapter(this,transName);
         TaskList.setAdapter(TA);
 
     }
@@ -68,8 +68,7 @@ public class TasksActivity extends AppCompatActivity implements View.OnClickList
 
         if(!flag || task.equals(""))
         {
-            Toast emptyWarning = Toast.makeText(getApplicationContext(),"Task cannot be Empty!",Toast.LENGTH_SHORT);
-            emptyWarning.show();
+            Toast.makeText(getApplicationContext(),"Task cannot be Empty!",Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -77,11 +76,4 @@ public class TasksActivity extends AppCompatActivity implements View.OnClickList
             addTask.setText("");
         }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        TA.realm.close();
-    }
-
 }

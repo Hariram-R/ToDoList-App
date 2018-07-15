@@ -25,7 +25,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> implem
 
     ArrayList<CourseModel> Cl;
 
-    RealmConfiguration defaultConfig = new RealmConfiguration.Builder().build();
     private final Realm realm;
 
 

@@ -17,8 +17,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TasksActivity" />
-        <activity android:name=".EditCourse"></activity>
+        <activity android:name=".TasksActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+
+
+        <activity android:name=".EditCourse"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+
+        </activity>
     </application>
 
 </manifest>

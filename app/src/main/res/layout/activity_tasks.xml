@@ -1,57 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.example.android.todolist.TasksActivity">
-    
-    <TextView
-        android:id="@+id/CourseName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="MATHEMATICS 2 MATH F112"
-        android:textAllCaps="true"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp"
-        android:paddingBottom="20dp"
-        />
-    
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/TaskListRV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/CourseName"
-       >
-        
-    </android.support.v7.widget.RecyclerView>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="true">
-        <EditText
-            android:id="@+id/InputTask"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:inputType="textCapSentences"
-            android:hint="@string/prompt"
-
-            />
-        <Button
-            android:id="@+id/AddTaskButton"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/CourseName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ADD"
+            android:text="MATHEMATICS 2 MATH F112"
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25sp"
+            android:paddingBottom="10dp"
             />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/TaskListRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:baselineAligned="true">
+            <EditText
+                android:id="@+id/InputTask"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
+                android:layout_gravity="center_vertical"
+                android:hint="@string/prompt"
+
+                />
+            <Button
+                android:id="@+id/AddTaskButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_add"
+                android:layout_gravity="center_vertical"
+                android:text="ADD"
+                android:textColor="#000"
+                />
+
+        </LinearLayout>
     </LinearLayout>
-    
 
-
-    
-</LinearLayout>
+</ScrollView>

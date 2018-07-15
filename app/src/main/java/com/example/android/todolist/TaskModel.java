@@ -4,14 +4,14 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Hp on 4/10/2018.
+ * Created by Hari on 10/04/2018.
  */
 
 public class TaskModel extends RealmObject {
 
+    @PrimaryKey
     String task;
 
-    @PrimaryKey
     String courseName;
 
     boolean isDone;
@@ -22,9 +22,16 @@ public class TaskModel extends RealmObject {
         isDone = false;
     }
 
+    public TaskModel(String task, String courseName, boolean isDone) {
+        this.task = task;
+        this.courseName = courseName;
+        this.isDone = isDone;
+    }
+
     public String getCourseName() {
 
         return courseName;
+
     }
 
     public void setCourseName(String courseName) {

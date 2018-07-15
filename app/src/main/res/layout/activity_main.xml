@@ -15,14 +15,17 @@
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Select Course :"
-    android:textSize="36sp"
+    android:text="Select Course"
+    android:textSize="34sp"
+    android:padding="5dp"
+    android:layout_gravity="center_horizontal"
     android:textColor="@color/colorPrimaryDark"
     />
 <TextView
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="@string/instruction"
+    android:layout_gravity="center_horizontal"
     android:paddingBottom="5dp"/>
 
 <android.support.v7.widget.RecyclerView
@@ -40,8 +43,9 @@
     android:id="@+id/AddCourseButton"
     android:background="@drawable/course_button"
     android:text="+ ADD NEW COURSE"
-    android:layout_marginTop="5dp"
+    android:layout_margin="7dp"
     android:textAllCaps="true"
+    android:padding="30dp"
     android:textSize="18sp"
     android:textColor="#FFFFFF"
         />

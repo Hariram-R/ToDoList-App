@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,34 +19,36 @@ import io.realm.RealmResults;
  * Created by Hp on 4/10/2018.
  */
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements RealmChangeListener<RealmResults<TaskModel>>
+public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>
 {
 
+    Context context;
     ArrayList<TaskModel> TaskList;
     String course;
     Realm realm;
-    int currentPos;
 
 
-    public TaskAdapter(String course)
-    {
+    public TaskAdapter(Context context, String course) {
+        this.context = context;
         this.course = course;
 
         this.TaskList = new ArrayList<>();
         realm = Realm.getDefaultInstance();
         loadTaskData();
+
     }
 
     void loadTaskData()
     {
-        RealmQuery<TaskModel> taskModelRealmQuery = realm.where(TaskModel.class);
-        RealmResults<TaskModel> taskModelRealmResults = taskModelRealmQuery.equalTo("courseName",course).findAll();
+        //TODO : Delete task if completed
 
-        taskModelRealmResults.addChangeListener(this);
+        RealmResults<TaskModel> taskModelRealmResults = realm.where(TaskModel.class).equalTo("courseName",course).findAll();
 
-        for(TaskModel iTM : taskModelRealmResults)
+        int i = 0;
+        while (i<taskModelRealmResults.size())
         {
-            TaskList.add(realm.copyFromRealm(iTM));
+            TaskList.add(taskModelRealmResults.get(i));
+            i++;
         }
         notifyDataSetChanged();
 
@@ -53,10 +56,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        realm = Realm.getDefaultInstance();
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view= layoutInflater.inflate(R.layout.item_task,parent,false);
-
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task,parent,false);
         TaskViewHolder Tvh = new TaskViewHolder(view);
         return Tvh;
     }
@@ -64,7 +64,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         holder.populateTask(TaskList.get(position));
-        currentPos = position;
     }
 
     @Override
@@ -74,32 +73,38 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
 
     public void addNewTask(String task)
     {
-        TaskModel newTaskObj = new TaskModel();
-        newTaskObj.setTask(task);
-        newTaskObj.setDone(false);
-        newTaskObj.setCourseName(course);
+        boolean flag = false;
 
-        TaskList.add(currentPos,newTaskObj);
-        notifyItemInserted(currentPos);
+        for(int i = 0;i<TaskList.size();i++)
+        {
+            if(task.equals(TaskList.get(i).getTask()))
+            {
+                Toast.makeText(context,"Task already exists!",Toast.LENGTH_SHORT).show();
+                flag = true;
+                break;
+            }
+        }
+        if(!flag)
+        {
+            TaskModel newTaskObj = new TaskModel();
+            newTaskObj.setTask(task);
+            newTaskObj.setDone(false);
+            newTaskObj.setCourseName(course);
 
-        realm.beginTransaction();
-        realm.insertOrUpdate(newTaskObj);
-        realm.commitTransaction();
+            TaskList.add(newTaskObj);
+            notifyDataSetChanged();
+
+            realm.beginTransaction();
+            realm.insert(newTaskObj);
+            realm.commitTransaction();
+        }
 
     }
 
 
     @Override
-    public void onChange(RealmResults<TaskModel> taskModels) {
-
-        taskModels = realm.where(TaskModel.class).equalTo("courseName",course).findAll();
-        this.TaskList = new ArrayList<>();
-
-        for(TaskModel iTM : taskModels)
-        {
-            this.TaskList.add(realm.copyFromRealm(iTM));
-        }
-        notifyDataSetChanged();
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        realm.close();
     }
-
 }

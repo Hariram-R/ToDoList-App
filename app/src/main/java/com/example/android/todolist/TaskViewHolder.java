@@ -6,6 +6,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import io.realm.Realm;
+
 /**
  * Created by Hp on 4/10/2018.
  */
@@ -14,7 +16,6 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements CompoundB
 
     CheckBox isdone;
     TextView Taskname;
-
     TaskModel Tm;
 
     public TaskViewHolder(View itemView) {
@@ -22,7 +23,6 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements CompoundB
 
         isdone = itemView.findViewById(R.id.TaskCheckBox);
         Taskname = itemView.findViewById(R.id.TaskName);
-
         isdone.setOnCheckedChangeListener(this);
     }
 
@@ -38,7 +38,21 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements CompoundB
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         if(compoundButton.isChecked())
         {
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
             Tm.setDone(true);
+            realm.insertOrUpdate(Tm);
+            realm.commitTransaction();
+            realm.close();
+        }
+        else
+        {
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            Tm.setDone(false);
+            realm.insertOrUpdate(Tm);
+            realm.commitTransaction();
+            realm.close();
         }
     }
 }

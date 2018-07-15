@@ -124,5 +124,6 @@ public class EditCourse extends AppCompatActivity implements View.OnClickListene
 
         Intent intenttoMainActivity = new Intent(view.getContext(),MainActivity.class);
         startActivity(intenttoMainActivity);
+        finish();
     }
 }
